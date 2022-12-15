@@ -23,6 +23,7 @@ export const ThankYouTitle = styled.h1`
   color: ${props => props.theme.colors.darkBlack};
   margin-bottom: 18px;
   margin-top: 34px;
+  text-align: center;
 `;
 
 export const SubmissionIdBox = styled.div`
@@ -38,10 +39,12 @@ export const SubmissionIdBox = styled.div`
   border-radius: 10px;
 `;
 
-export const BeforeSubmitText = styled.p`
+export const BeforeSubmitText = styled.p<{$centered?: boolean}>`
   font-family: 'Source Sans Pro';
   font-size: 14px;
   line-height: 142.69%;
   margin-bottom: 2px;
   color: ${colors.darkBlack};
+
+  ${({ $centered }) => $centered && 'text-align: center;'}
 `;

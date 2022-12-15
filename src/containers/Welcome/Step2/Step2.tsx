@@ -4,11 +4,8 @@ import { useTranslation, Trans } from 'react-i18next';
 import usePortal from 'react-useportal';
 
 // Form
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useStateMachine } from 'little-state-machine';
-import { yupResolver } from '@hookform/resolvers';
-import { ErrorMessage } from '@hookform/error-message';
-import * as Yup from 'yup';
 
 // Update Action
 import { resetStore, updateAction } from 'utils/wizard';
@@ -25,32 +22,17 @@ import { scrollToTop } from 'helper/scrollHelper';
 
 // Assets
 import HeaderSplash from 'assets/images/baseLogoSplash.png';
-
-// Icons
-import { ReactComponent as ExclamationSVG } from 'assets/icons/exclamationCircle.svg';
+import AWSImage from 'assets/images/aws-logo.png';
 
 // Styles
 import {
   HeaderImageContainer,
   HeaderImage,
   LogoWhiteBG,
-  CustomPurpleText,
   WelcomeContent,
-  WelcomeBullets,
-  BulletIndicator,
   WelcomeStyledFormAlternative,
-  InstructionContainer,
-  WelcomeInput,
-  TextErrorContainer,
+  AWSLogo,
 } from '../style';
-
-const schema = Yup.object({
-  patientId: Yup.string()
-    .matches(/^\d{6,10}$/, { message: 'patientIdRequired', excludeEmptyString: true })
-    .required('patientIdLength'),
-}).defined();
-
-type Step2Type = Yup.InferType<typeof schema>;
 
 const Step2 = (p: Wizard.StepProps) => {
   const { Portal } = usePortal({
@@ -71,25 +53,20 @@ const Step2 = (p: Wizard.StepProps) => {
   const history = useHistory();
 
   const {
-    control,
     formState,
     handleSubmit,
     reset,
   } = useForm({
     defaultValues: store,
-    resolver: yupResolver(schema),
     mode: 'onChange',
   });
 
-  const { errors, isValid } = formState;
+  const { isValid } = formState;
 
-  const onSubmit = async (values: Step2Type) => {
-    if (values) {
-      actions.update(values);
-      if (p.nextStep) {
-        setActiveStep(false);
-        history.push(p.nextStep);
-      }
+  const onSubmit = async () => {
+    if (p.nextStep) {
+      setActiveStep(false);
+      history.push(p.nextStep);
     }
   };
 
@@ -128,86 +105,46 @@ const Step2 = (p: Wizard.StepProps) => {
         />
         <LogoWhiteBG />
       </HeaderImageContainer>
-      <CustomPurpleText mb={15}>
-        {t('main:paragraph2', 'Covid-19 Cough Data Collection Study')}
-      </CustomPurpleText>
+      <AWSLogo src={AWSImage} />
       <WelcomeContent maxWidth={470} mt={0}>
         <BlackText>
           <Trans i18nKey="helpVirufy:introParagraph">
             <p>
-              Welcome to our study! This should only take you about 5 minutes to complete.
-              Before we begin, let’s discuss what we will cover:
+              Welcome to our research!
+              This page will give you an overview of our research.
+              *This will take approximately 5 minutes.
             </p>
           </Trans>
         </BlackText>
 
-        <InstructionContainer>
-          <WelcomeBullets>
-            <BulletIndicator>1</BulletIndicator>
-          </WelcomeBullets>
-          <BlackText>
-            <Trans i18nKey="helpVirufy:bulletsIntro">
-              <strong>Intro: </strong>About us and Safety Reminders
-            </Trans>
-          </BlackText>
-        </InstructionContainer>
-
-        <InstructionContainer>
-          <WelcomeBullets>
-            <BulletIndicator>2</BulletIndicator>
-          </WelcomeBullets>
-          <BlackText>
-            <Trans i18nKey="helpVirufy:bulletCough">
-              <strong>Cough Into Phone</strong>
-            </Trans>
-          </BlackText>
-        </InstructionContainer>
-
-        <InstructionContainer>
-          <WelcomeBullets>
-            <BulletIndicator>3</BulletIndicator>
-          </WelcomeBullets>
-          <BlackText>
-            <Trans i18nKey="helpVirufy:bulletQuestions">
-              <strong>Quick Health Questions</strong>
-            </Trans>
-          </BlackText>
-        </InstructionContainer>
         <BlackText>
-          <strong>
-            {t('main:patientId', 'Enter patient ID:')}
-          </strong>
+          <Trans i18nKey="helpVirufy:introParagraphJapanTitle">
+            <strong>
+              COVID-19 Request for Cough Data Collection
+            </strong>
+          </Trans>
         </BlackText>
-        <Controller
-          control={control}
-          name="patientId"
-          defaultValue=""
-          render={({ onChange, value, name }) => (
-            <>
-              <WelcomeInput
-                name={name}
-                value={value}
-                onChange={onChange}
-                type="text"
-                autoComplete="Off"
-                placeholder={
-                  t('main:enterPatientId', 'Enter patient ID:')
-                }
-                error={errors.patientId}
-              />
-              {errors.patientId && (
-                <TextErrorContainer>
-                  <ExclamationSVG />
-                  <ErrorMessage
-                    errors={errors}
-                    name="patientId"
-                    render={({ message }) => <p>{t(`main:${message}`)}</p>}
-                  />
-                </TextErrorContainer>
-              )}
-            </>
-          )}
-        />
+
+        <BlackText>
+          <Trans i18nKey="helpVirufy:introParagraphJapanDesc">
+            <p>
+              Purpose and positioning of the service
+              <br />
+              {/* eslint-disable-next-line max-len */}
+              Virufy is a service that uses Artificial Intelligence (Al) to analyze voice patterns to determine if they are similar to the cough of a patient suffering from COVID-19. This service is not a medical device and provides information only and is not intended to provide medical advice, diagnosis, treatment, or prevention. The Service is not a substitute for a physician or other medical professional, and you should not make any medical decisions or take or discontinue any action (such as taking medication) based on the information provided. Also, do not use this service in life-threatening or emergency conditions. This service is not responsible for any disease you may be suffering from or the consequences of any action you take based on the information provided.
+            </p>
+          </Trans>
+        </BlackText>
+
+        <BlackText>
+          <Trans i18nKey="helpVirufy:introParagraphJapanFooter">
+            <strong>
+              Purpose and positioning of the service <br />
+              Terms of Use and Privacy Policy<br />
+              Please use this service after agreeing to the following
+            </strong>
+          </Trans>
+        </BlackText>
 
         {activeStep && (
           <Portal>

@@ -18,7 +18,7 @@ const FooterReportProblems = () => {
   const { t } = useTranslation();
   const location = useLocation();
 
-  const lang = 'es';
+  const lang = 'ja';
 
   if (location.pathname === '/welcome') return null;
 

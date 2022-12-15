@@ -10,7 +10,6 @@ import useHeaderContext from 'hooks/useHeaderContext';
 // Components
 import WizardButtons from 'components/WizardButtons';
 import { BlackText } from 'components/Texts';
-import LinkPurple from 'components/LinkPurple';
 
 // Utils
 import { scrollToTop } from 'helper/scrollHelper';
@@ -18,7 +17,6 @@ import { scrollToTop } from 'helper/scrollHelper';
 // Styles
 import {
   ContainerShapeDown,
-  WelcomeNote,
   InnerContainerShapeDown,
   WelcomeContent,
   WelcomeStyledFormAlternative,
@@ -74,35 +72,16 @@ const Step3 = (p: Wizard.StepProps) => {
       <WelcomeContent maxWidth={470} mt={0}>
         <BlackText>
           <Trans i18nKey="helpVirufy:aboutParagraph">
-            <p>
-              Virufy is a <strong>nonprofit organization</strong> that is working
-              to develop the means to use
-              <strong> artificial intelligence (Al) to screen for COVID-19 from cough patterns</strong>
-              rapidly and at no cost through use of a smartphone for the benefit of low-income countries.
-            </p>
-            <p>
-              Our team includes researchers from over <strong>25 countries</strong>.
-              <LinkPurple to="https://virufy.org/es/our-approach" target="_blank"> Our research</LinkPurple> has shown that Al technology may be able to identify COVID&apos;s unique coug signature.
-            </p>
-            <p>
-              By collecting <strong>coughs recordings</strong> from people around the world,
-              Virufy is improving the robustness of its AI algorithm in recognizing COVID&apos;s
-              unique sound pattern.
-            </p>
-            <p>
-              <strong>You have the power</strong>to help benefit millions of
-              people across the globe by <strong>contributing your cough</strong> in our study.
-            </p>
+            {/* eslint-disable-next-line max-len */}
+            <p>Before we begin, regarding us and our research. <br /> We will give you a 5-minute explanation about us and our research.</p>
           </Trans>
         </BlackText>
-        <WelcomeNote>
+        <BlackText $textLeft>
           <Trans i18nKey="main:note">
-            <strong>Please note:</strong> This form is for data collection only. It will not predict your COVID-19
-            status or diagnose any disease, disorder, or other health condition. Virufy is conducting research and
-            will use the information you provide for that research only. Virufy will not take place of a doctor and
-            would like to remind you it is your responsibility to seek medical advice from your doctor.
+            {/* eslint-disable-next-line max-len */}
+            <strong>Organization</strong> <br />Virufy, a nonprofit corporation developing an artificial intelligence (AI) application that can tell if the sounds of a cough are similar to those of a patient suffering from COVID-19, is conducting a clinical study (collecting sounds for AI training) to collect cough sounds for the Japanese rollout of this application.<br /><br />Virufy is a U.S. California nonprofit organization recognized as a tax-exempt public benefit corporation under Section 501(c)(3) of the U.S. Internal Revenue Code. We were founded in March 2020 as a project of the COVID-19 Innovation Response Lab at Stanford University and have been active worldwide, including Japan. With the help of leading researchers and experts from around the world and more than 50 organizations, including medical institutions, law firms, technology companies, university groups, and global NGOs, we have collected over 400,000 data samples of coughing voices and built our own machine learning We are developing AI applications based on algorithms.
           </Trans>
-        </WelcomeNote>
+        </BlackText>
       </WelcomeContent>
 
       {activeStep && (

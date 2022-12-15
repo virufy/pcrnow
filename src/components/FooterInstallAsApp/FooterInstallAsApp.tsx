@@ -31,7 +31,7 @@ const FooterInstallAsApp = () => {
       }
     }
   }, [handlePrompt, setIsInstalled]);
-  if (location.pathname !== '/welcome/step-2') return null;
+  if (location.pathname !== '/welcome' && location.pathname !== '/welcome/step-3') return null;
 
   return (
     <>
