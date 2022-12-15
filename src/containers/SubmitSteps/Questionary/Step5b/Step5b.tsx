@@ -20,8 +20,6 @@ import useHeaderContext from 'hooks/useHeaderContext';
 import { scrollToTop } from 'helper/scrollHelper';
 
 // Components
-import ProgressIndicator from 'components/ProgressIndicator';
-import OptionList from 'components/OptionList';
 import WizardButtons from 'components/WizardButtons';
 
 // Icons
@@ -30,20 +28,19 @@ import { ReactComponent as ExclamationSVG } from 'assets/icons/exclamationCircle
 // Styles
 import { TextErrorContainer } from 'containers/Welcome/style';
 import {
-  QuestionText, MainContainer, QuestionNote,
+  QuestionText, MainContainer, QuestionInput,
 } from '../style';
 
 const schema = Yup.object({
-  biologicalSex: Yup.string().required('biologicalSexRequired'),
+  symptomsStartedDate: Yup.string().required('symptomsStartedDateRequired'),
 }).defined();
 
-type Step2Type = Yup.InferType<typeof schema>;
+type Step7bType = Yup.InferType<typeof schema>;
 
-const Step2 = ({
+const Step7b = ({
   previousStep,
   nextStep,
   storeKey,
-  metadata,
 }: Wizard.StepProps) => {
   // Hooks
   const { Portal } = usePortal({
@@ -65,12 +62,9 @@ const Step2 = ({
     defaultValues: state?.[storeKey],
     resolver: yupResolver(schema),
   });
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
-  const {
-    isValid,
-  } = formState;
-
+  // Handlers
   const handleDoBack = React.useCallback(() => {
     setActiveStep(false);
     if (previousStep) {
@@ -80,15 +74,7 @@ const Step2 = ({
     }
   }, [history, previousStep]);
 
-  useEffect(() => {
-    scrollToTop();
-    setTitle(`${t('questionary:biologicalSex.title')}`);
-    setType('primary');
-    setDoGoBack(() => handleDoBack);
-  }, [handleDoBack, setDoGoBack, setTitle, setType, metadata, t]);
-
-  // Handlers
-  const onSubmit = async (values: Step2Type) => {
+  const onSubmit = async (values: Step7bType) => {
     if (values) {
       action(values);
       if (nextStep) {
@@ -98,51 +84,41 @@ const Step2 = ({
     }
   };
 
+  useEffect(() => {
+    scrollToTop();
+    setTitle(`${t('questionary:symptomsDateTitle')}`);
+    setType('primary');
+    setDoGoBack(() => handleDoBack);
+  }, [handleDoBack, setDoGoBack, setTitle, setType, t]);
+
   return (
     <MainContainer>
-      <ProgressIndicator
-        currentStep={metadata?.current}
-        totalSteps={metadata?.total}
-        progressBar
-      />
-      <QuestionText first hasNote>
-        {t('questionary:biologicalSex.question')}
+      <QuestionText extraSpace first>
+        {t('questionary:symptomsDate')}
       </QuestionText>
-      <QuestionNote>{t('questionary:biologicalSex.note')}</QuestionNote>
       <Controller
         control={control}
-        name="biologicalSex"
+        name="symptomsStartedDate"
         defaultValue=""
-        render={({ onChange, value }) => (
-          <OptionList
-            singleSelection
-            value={{ selected: value ? [value] : [] }}
-            onChange={v => onChange(v.selected[0])}
-            items={[
-              {
-                value: 'male',
-                label: t('questionary:biologicalSex.options.male'),
-              },
-              {
-                value: 'female',
-                label: t('questionary:biologicalSex.options.female'),
-              },
-              {
-                value: 'notToSay',
-                label: t('questionary:biologicalSex.options.notToSay'),
-              },
-            ]}
+        render={({ onChange, value, name }) => (
+          <QuestionInput
+            name={name}
+            value={value}
+            onChange={onChange}
+            type="number"
+            placeholder={t('questionary:enterDays')}
+            autoComplete="Off"
           />
         )}
       />
       {/* Bottom Buttons */}
       <ErrorMessage
         errors={errors}
-        name="biologicalSex"
+        name="symptomsStartedDate"
         render={({ message }) => (
           <TextErrorContainer>
             <ExclamationSVG />
-            {t(`main:${message}`, 'Please select an option')}
+            {t(`main:${message}`, 'Please enter the days')}
           </TextErrorContainer>
         )}
       />
@@ -160,4 +136,4 @@ const Step2 = ({
   );
 };
 
-export default React.memo(Step2);
+export default React.memo(Step7b);

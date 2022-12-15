@@ -56,7 +56,7 @@ const App = () => {
           </Switch>
         </FullWidth>
         <FooterInstallAsApp />
-        {(!pathname.includes('/submit-steps/thank-you')) && <FooterReportProblems /> }
+        {(!pathname.includes('/submit-steps/thank-you')) && (!pathname.includes('/welcome/step-3')) && <FooterReportProblems /> }
       </HeaderContextProvider>
     </AppContainer>
   );

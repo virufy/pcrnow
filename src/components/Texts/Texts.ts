@@ -42,7 +42,7 @@ export const TitleBlack = styled.div`
   text-align: center;
 `;
 
-export const BlackText = styled.h2`
+export const BlackText = styled.h2<{ $textLeft?: boolean }>`
   font-family: 'Source Sans Pro';
   font-size: 0.875rem;
   line-height: 20px;
@@ -56,7 +56,9 @@ export const BlackText = styled.h2`
   padding-left: 20px;
   padding-right: 20px;
   width: 100%;
-  
+
+  ${({ $textLeft }) => $textLeft && 'text-align: left !important;'}
+
   > p {
     margin-bottom: 20px;
     &:last-of-type {

@@ -1,1 +1,1 @@
-export const currentCountry = 'Colombia';
+export const currentCountry = 'Japan';

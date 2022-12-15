@@ -1,11 +1,10 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 import { useStateMachine } from 'little-state-machine';
 
 // Components
 import StayInTouch from 'components/StayInTouch';
-import SocialIcons from 'components/SocialIcons';
 import CreatedBy from 'components/CreatedBy';
 
 // Utils
@@ -19,6 +18,7 @@ import useHeaderContext from 'hooks/useHeaderContext';
 
 import {
   BeforeSubmitText,
+  SubmissionIdBox,
   ThankYouLayout,
   ThankYouTitle,
 } from './style';
@@ -36,6 +36,9 @@ const ThankYou = (p: Wizard.StepProps) => {
   const { action } = useStateMachine(resetStore());
 
   const history = useHistory();
+  const location = useLocation<ThankYouLocation>();
+
+  const submissionId = location.state?.submissionId;
 
   React.useEffect(() => {
     action({});
@@ -61,13 +64,30 @@ const ThankYou = (p: Wizard.StepProps) => {
   return (
     <ThankYouLayout>
       <ThankYouTitle>{t('thankyou:title')}</ThankYouTitle>
-      <BeforeSubmitText>{t('thankyou:paragraph1_cough')}</BeforeSubmitText>
+      <BeforeSubmitText $centered><Trans i18nKey="thankyou:paragraph1" /></BeforeSubmitText>
+      {submissionId && (
+        <SubmissionIdBox>
+          <Trans i18nKey="thankyou:paragraph2">
+            Your unique submission ID:
+            <br />
+            <strong>{{ submissionId }}</strong>
+          </Trans>
+        </SubmissionIdBox>
+      )}
+      <BeforeSubmitText>
+        <Trans i18nKey="thankyou:paragraph3">
+          Make sure to safeguard this submission ID, as you will need it to request Virufy to delete your anonymized
+          data in future.
+          <br /><br />
+          If you later develop symptoms such as cough, fever, or shortness of breath, please come
+          back to resubmit your
+          latest cough sounds.
+        </Trans>
+      </BeforeSubmitText>
 
       <StayInTouch />
 
-      <SocialIcons />
-
-      <CreatedBy inline={false} mt="72px" />
+      <CreatedBy inline={false} mt="32px" />
 
     </ThankYouLayout>
   );

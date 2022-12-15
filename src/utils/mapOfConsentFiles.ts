@@ -1,10 +1,10 @@
 export const mapOfConsentFiles = {
-  Colombia: {
+  Global: {
     consentLang: [
       'default.html',
     ],
   },
-  Global: {
+  Japan: {
     consentLang: [
       'default.html',
     ],
