@@ -27,10 +27,6 @@ export async function doSubmit({
     const {
       agreedConsentTerms,
       agreedPolicyTerms,
-      agreedCovidDetection,
-      agreedCovidCollection,
-      agreedTrainingArtificial,
-      agreedBiometric,
     } = state.welcome;
 
     const {
@@ -55,10 +51,6 @@ export async function doSubmit({
 
     body.append('agreedConsentTerms', agreedConsentTerms);
     body.append('agreedPolicyTerms', agreedPolicyTerms);
-    body.append('agreedCovidCollection', agreedCovidCollection);
-    body.append('agreedCovidDetection', agreedCovidDetection);
-    body.append('agreedTrainingArtificial', agreedTrainingArtificial);
-    body.append('agreedBiometric', agreedBiometric);
 
     const coughFile = recordYourCough.recordingFile || recordYourCough.uploadedFile;
     body.append('cough', coughFile, coughFile.name || 'filename.wav');
@@ -91,8 +83,16 @@ export async function doSubmit({
       body.append('smokeLastSixMonths', smokeLastSixMonths);
     }
 
-    if (currentMedicalCondition) {
-      body.append('currentMedicalCondition', currentMedicalCondition);
+    if (currentMedicalCondition?.length > 0) {
+      body.append('currentMedicalCondition', currentMedicalCondition.join(','));
+    }
+
+    if (currentMedicalCondition?.other) {
+      body.append('otherMedicalConditions', currentMedicalCondition?.other);
+    }
+
+    if (currentSymptoms?.length > 0) {
+      body.append('currentSymptoms', currentSymptoms.join(','));
     }
 
     if (currentSymptoms?.other) {
@@ -103,9 +103,9 @@ export async function doSubmit({
       body.append('captchaValue', captchaValue);
     }
 
-    const response = await axiosClient.post('saveCompensarInfo', body, {
+    const response = await axiosClient.post('savePcrnowInfo', body, {
       headers: {
-        'Content-Type': 'multipart/form-data; boundary=saveCompensarInfo',
+        'Content-Type': 'multipart/form-data; boundary=savePcrnowInfo',
       },
     });
 

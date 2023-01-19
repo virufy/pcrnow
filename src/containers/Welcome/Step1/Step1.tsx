@@ -179,11 +179,12 @@ const Step1 = (p: Wizard.StepProps) => {
 
   useEffect(() => {
     const localStorageCountry = localStorage.getItem('countryResult');
-    const virufyWizard = localStorage.getItem('compensar-app-wizard');
+    const virufyWizard = localStorage.getItem('pcrnow-wizard');
     if (virufyWizard) {
       const parsedVirufyWizard = JSON.parse(virufyWizard);
       setValue('country', parsedVirufyWizard.welcome.country);
       setValue('language', parsedVirufyWizard.welcome.language);
+      setValue('region', parsedVirufyWizard.welcome.region);
       if (localStorageCountry) {
         setSupportedLang(JSON.parse(localStorageCountry)?.supported);
       }

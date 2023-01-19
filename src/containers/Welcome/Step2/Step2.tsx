@@ -3,13 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import usePortal from 'react-useportal';
 
-// Form
-import { useForm } from 'react-hook-form';
-import { useStateMachine } from 'little-state-machine';
-
-// Update Action
-import { resetStore, updateAction } from 'utils/wizard';
-
 // Header Control
 import useHeaderContext from 'hooks/useHeaderContext';
 
@@ -38,11 +31,6 @@ const Step2 = (p: Wizard.StepProps) => {
   const { Portal } = usePortal({
     bindTo: document && document.getElementById('wizard-buttons') as HTMLDivElement,
   });
-  const resetExecuted = React.useRef(true);
-
-  const { state, actions } = useStateMachine({ update: updateAction(p.storeKey), reset: resetStore() });
-
-  const store = state?.[p.storeKey];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeStep, setActiveStep] = useState(true);
@@ -52,18 +40,7 @@ const Step2 = (p: Wizard.StepProps) => {
 
   const history = useHistory();
 
-  const {
-    formState,
-    handleSubmit,
-    reset,
-  } = useForm({
-    defaultValues: store,
-    mode: 'onChange',
-  });
-
-  const { isValid } = formState;
-
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (p.nextStep) {
       setActiveStep(false);
       history.push(p.nextStep);
@@ -86,14 +63,6 @@ const Step2 = (p: Wizard.StepProps) => {
     setLogoSize('regular');
     setType('null');
   }, [doBack, setDoGoBack, setLogoSize, setType, setSubtitle]);
-
-  useEffect(() => {
-    if (resetExecuted.current) {
-      resetExecuted.current = false;
-      actions.reset({ welcome: {} });
-      reset({ patientId: '' });
-    }
-  }, [actions.reset, actions, reset]);
 
   const { t } = useTranslation();
 
@@ -150,9 +119,8 @@ const Step2 = (p: Wizard.StepProps) => {
           <Portal>
             <WizardButtons
               invert
-              leftDisabled={!isValid}
-              leftLabel={t('helpVirufy:nextButton')}
-              leftHandler={handleSubmit(onSubmit)}
+              leftLabel={t('helpVirufy:agreeButton')}
+              leftHandler={onSubmit}
             />
           </Portal>
         )}

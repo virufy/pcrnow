@@ -181,7 +181,7 @@ const Step4 = (p: Wizard.StepProps) => {
           <Portal>
             <WizardButtons
               invert
-              leftLabel={t('consent:nextButton')}
+              leftLabel={t('consent:cooperateButton')}
               leftHandler={handleSubmit(onSubmit)}
               leftDisabled={!isValid}
             />

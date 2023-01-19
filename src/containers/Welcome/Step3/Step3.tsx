@@ -88,7 +88,7 @@ const Step3 = (p: Wizard.StepProps) => {
         <Portal>
           <WizardButtons
             invert
-            leftLabel={t('helpVirufy:nextButton')}
+            leftLabel={t('helpVirufy:nextPageButton')}
             leftHandler={handleNext}
           />
         </Portal>

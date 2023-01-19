@@ -28,7 +28,7 @@ createStore({
     },
   },
 }, {
-  name: 'compensar-app-wizard',
+  name: 'pcrnow-wizard',
 });
 
 const SubmitSteps = () => {

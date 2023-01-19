@@ -15,8 +15,12 @@
       "regionRequired": "地域を選択してください",
       "enterPatientId": "患者IDの入力",
       "nextButton": "次へ",
+      "nextPageButton": "次のページ",
+      "agreeButton": "同意する",
+      "cooperateButton": "同意して研究に協力する",
       "createdBy": "作成者",
       "installApp": "アプリとしてインストールする",
+      "createShortcut": "ショートカットを作成する",
       "addToHomeScreen": "ホーム画面に追加する",
       "hello": "こんにちは。",
       "patient": "患者さん",
@@ -274,7 +278,7 @@
       "jumpToBottom": "下へジャンプ"
   },
   "beforeStart": {
-      "title": "最後に、始める前に...",
+      "title": "始める前に...",
       "subtitle": "<strong>安全性を確保するために、次のことをお勧めします：</strong>",
       "advise_list": [
           "ご自身の機器を使用し、必要に応じてマスクを着用してください。",
@@ -332,7 +336,7 @@
       "addFile": "自分のファイルを追加する",
       "constraint": "5MBまで追加可能",
       "next": "次へ",
-      "micError": "マイクにアクセスできない場合 音声ファイル（.wav/.wave/.mp3/.ogg）のアップロード",
+      "micError": "マイクにアクセスできない場合、音声ファイル（.wav/.mp3/.ogg） をアップロードいただけます。",
       "micErrorDescription": "ここに音声ファイルをアップロードしてください。",
       "fileDurationTooShort": "3秒以上のファイルをアップロードしてください。",
       "fileSizeTooBig": "5MB以下のファイルをアップロードしてください。",
@@ -352,10 +356,10 @@
           "header": "咳を録音する",
           "intro1": "あなたの声を録音することで、COVIDの音を知ることができます。録音を押して、1から10まではっきりと数えてください。"
       },
-      "title": "アップロード完了",
+      "title": "録音の確認",
       "subtitle": "録音した音声をご確認ください。",
-      "next": "データを送信する",
-      "retake": "リテイク"
+      "next": "データをアップロードする",
+      "retake": "もう一度録音する"
   },
   "questionary": {
       "headerText": "質問",
@@ -468,7 +472,7 @@
           }
       },
       "biologicalSex": {
-          "title": "生物学的性別",
+          "title": "生物学上の性別",
           "question": "あなたの生物学的性別は何ですか？",
           "note": "この情報は、声の響きが生物学的性別によって異なるため、AIがCOVID-19を検出するために重要です。生物学的性別とは、出生証明書で確認出来る性別のことです。",
           "options": {
