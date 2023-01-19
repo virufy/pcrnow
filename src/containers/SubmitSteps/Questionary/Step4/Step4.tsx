@@ -30,16 +30,16 @@ import { ReactComponent as ExclamationSVG } from 'assets/icons/exclamationCircle
 // Styles
 import { TextErrorContainer } from 'containers/Welcome/style';
 import {
-  QuestionText, MainContainer, QuestionNote,
+  QuestionText, QuestionNote, MainContainer, QuestionInput,
 } from '../style';
 
 const schema = Yup.object({
-  biologicalSex: Yup.string().required('biologicalSexRequired'),
+  smokeLastSixMonths: Yup.string().required('smokeLastSixMonthsRequired'),
 }).defined();
 
-type Step2Type = Yup.InferType<typeof schema>;
+type Step4Type = Yup.InferType<typeof schema>;
 
-const Step2 = ({
+const Step4 = ({
   previousStep,
   nextStep,
   storeKey,
@@ -82,13 +82,13 @@ const Step2 = ({
 
   useEffect(() => {
     scrollToTop();
-    setTitle(`${t('questionary:biologicalSex.title')}`);
+    setTitle(`${t('questionary:smokeLastSixMonths.title')}`);
     setType('primary');
     setDoGoBack(() => handleDoBack);
   }, [handleDoBack, setDoGoBack, setTitle, setType, metadata, t]);
 
   // Handlers
-  const onSubmit = async (values: Step2Type) => {
+  const onSubmit = async (values: Step4Type) => {
     if (values) {
       action(values);
       if (nextStep) {
@@ -105,13 +105,13 @@ const Step2 = ({
         totalSteps={metadata?.total}
         progressBar
       />
-      <QuestionText first hasNote>
-        {t('questionary:biologicalSex.question')}
+      <QuestionText extraSpace first>
+        {t('questionary:smokeLastSixMonths.question')}
+        <QuestionNote>{t('questionary:smokeLastSixMonths.note')}</QuestionNote>
       </QuestionText>
-      <QuestionNote>{t('questionary:biologicalSex.note')}</QuestionNote>
       <Controller
         control={control}
-        name="biologicalSex"
+        name="smokeLastSixMonths"
         defaultValue=""
         render={({ onChange, value }) => (
           <OptionList
@@ -120,25 +120,39 @@ const Step2 = ({
             onChange={v => onChange(v.selected[0])}
             items={[
               {
-                value: 'male',
-                label: t('questionary:biologicalSex.options.male'),
+                value: 'true',
+                label: t('questionary:smokeLastSixMonths.options.yes'),
               },
               {
-                value: 'female',
-                label: t('questionary:biologicalSex.options.female'),
-              },
-              {
-                value: 'notToSay',
-                label: t('questionary:biologicalSex.options.notToSay'),
+                value: 'false',
+                label: t('questionary:smokeLastSixMonths.options.no'),
               },
             ]}
+          />
+        )}
+      />
+
+      <QuestionText extraSpace>{t('questionary:smokeLastSixMonths.question2')}</QuestionText>
+
+      <Controller
+        control={control}
+        name="yearsSmoking"
+        defaultValue=""
+        render={({ onChange, value, name }) => (
+          <QuestionInput
+            name={name}
+            value={value}
+            onChange={onChange}
+            type="number"
+            placeholder={t('questionary:smokeLastSixMonths.enterYears')}
+            autoComplete="Off"
           />
         )}
       />
       {/* Bottom Buttons */}
       <ErrorMessage
         errors={errors}
-        name="biologicalSex"
+        name="smokeLastSixMonths"
         render={({ message }) => (
           <TextErrorContainer>
             <ExclamationSVG />
@@ -160,4 +174,4 @@ const Step2 = ({
   );
 };
 
-export default React.memo(Step2);
+export default React.memo(Step4);

@@ -25,27 +25,25 @@ export async function doSubmit({
   try {
     setSubmitError(null);
     const {
-      patientId,
       agreedConsentTerms,
       agreedPolicyTerms,
-      agreedCovidDetection,
-      agreedCovidCollection,
-      agreedTrainingArtificial,
-      agreedBiometric,
     } = state.welcome;
 
     const {
       recordYourCough,
+      recordYourBreath,
+      recordYourSpeech,
       currentSymptoms,
       symptomsStartedDate,
+      ageGroup,
+      biologicalSex,
+      vaccine,
+      smokeLastSixMonths,
+      currentMedicalCondition,
 
     } = state['submit-steps'];
 
     const body = new FormData();
-
-    if (patientId) {
-      body.append('patientId', patientId);
-    }
 
     if (window.sourceCampaign) {
       body.append('source', window.sourceCampaign);
@@ -53,13 +51,13 @@ export async function doSubmit({
 
     body.append('agreedConsentTerms', agreedConsentTerms);
     body.append('agreedPolicyTerms', agreedPolicyTerms);
-    body.append('agreedCovidCollection', agreedCovidCollection);
-    body.append('agreedCovidDetection', agreedCovidDetection);
-    body.append('agreedTrainingArtificial', agreedTrainingArtificial);
-    body.append('agreedBiometric', agreedBiometric);
 
     const coughFile = recordYourCough.recordingFile || recordYourCough.uploadedFile;
     body.append('cough', coughFile, coughFile.name || 'filename.wav');
+    const breathFile = recordYourBreath.recordingFile || recordYourBreath.uploadedFile;
+    body.append('breath', breathFile, breathFile.name || 'filename_breath.wav');
+    const voiceFile = recordYourSpeech.recordingFile || recordYourSpeech.uploadedFile;
+    body.append('voice', voiceFile, voiceFile.name || 'filename_voice.wav');
 
     if (currentSymptoms?.selected?.length > 0) {
       body.append('currentSymptoms', currentSymptoms.selected.join(','));
@@ -67,6 +65,34 @@ export async function doSubmit({
 
     if (symptomsStartedDate) {
       body.append('symptomsStartedDate', symptomsStartedDate);
+    }
+
+    if (ageGroup) {
+      body.append('ageGroup', ageGroup);
+    }
+
+    if (biologicalSex) {
+      body.append('biologicalSex', biologicalSex);
+    }
+
+    if (vaccine) {
+      body.append('vaccine', vaccine);
+    }
+
+    if (smokeLastSixMonths) {
+      body.append('smokeLastSixMonths', smokeLastSixMonths);
+    }
+
+    if (currentMedicalCondition?.length > 0) {
+      body.append('currentMedicalCondition', currentMedicalCondition.join(','));
+    }
+
+    if (currentMedicalCondition?.other) {
+      body.append('otherMedicalConditions', currentMedicalCondition?.other);
+    }
+
+    if (currentSymptoms?.length > 0) {
+      body.append('currentSymptoms', currentSymptoms.join(','));
     }
 
     if (currentSymptoms?.other) {
@@ -77,9 +103,9 @@ export async function doSubmit({
       body.append('captchaValue', captchaValue);
     }
 
-    const response = await axiosClient.post('saveCompensarInfo', body, {
+    const response = await axiosClient.post('savePcrnowInfo', body, {
       headers: {
-        'Content-Type': 'multipart/form-data; boundary=saveCompensarInfo',
+        'Content-Type': 'multipart/form-data; boundary=savePcrnowInfo',
       },
     });
 

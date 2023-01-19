@@ -3,11 +3,15 @@ import { useHistory } from 'react-router-dom';
 import usePortal from 'react-useportal';
 import { useTranslation } from 'react-i18next';
 
-// Update Action
+// Form
+import { useForm, Controller } from 'react-hook-form';
+import { useStateMachine } from 'little-state-machine';
+import { yupResolver } from '@hookform/resolvers';
+import { ErrorMessage } from '@hookform/error-message';
+import * as Yup from 'yup';
 
-// Components
-import { TitleBlack } from 'components/Texts';
-import WizardButtons from 'components/WizardButtons';
+// Update Action
+import { updateAction } from 'utils/wizard';
 
 // Header Control
 import useHeaderContext from 'hooks/useHeaderContext';
@@ -15,16 +19,35 @@ import useHeaderContext from 'hooks/useHeaderContext';
 // Utils
 import { scrollToTop } from 'helper/scrollHelper';
 
+// Components
+import ProgressIndicator from 'components/ProgressIndicator';
+import WizardButtons from 'components/WizardButtons';
+
+// Icons
+import { ReactComponent as ExclamationSVG } from 'assets/icons/exclamationCircle.svg';
+
 // Styles
+import { TextErrorContainer } from 'containers/Welcome/style';
 import {
-  MainContainer,
-  QuestionNote,
-  WomanWithPhone,
+  QuestionText, MainContainer, QuestionInput,
 } from '../style';
+
+const schema = Yup.object({
+  ageGroup: Yup.string().required('ageGroupRequired').test('age-invalid', '', value => {
+    let result = true;
+    if (value && !value.match(/^[0-9]+$/)) {
+      result = false;
+    }
+    return result;
+  }),
+}).defined();
+
+type Step1Type = Yup.InferType<typeof schema>;
 
 const Step1 = ({
   previousStep,
   nextStep,
+  storeKey,
   metadata,
 }: Wizard.StepProps) => {
   // Hooks
@@ -32,13 +55,24 @@ const Step1 = ({
     bindTo: document && document.getElementById('wizard-buttons') as HTMLDivElement,
   });
   const {
-    setDoGoBack, setTitle, setSubtitle, setType,
+    setDoGoBack, setTitle, setType, setSubtitle,
   } = useHeaderContext();
   const history = useHistory();
   const { t } = useTranslation();
+  const { state, action } = useStateMachine(updateAction(storeKey));
 
   // States
   const [activeStep, setActiveStep] = React.useState(true);
+
+  // Form
+  const {
+    control, handleSubmit, formState,
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: state?.[storeKey],
+    resolver: yupResolver(schema),
+  });
+  const { errors } = formState;
 
   const handleDoBack = React.useCallback(() => {
     setActiveStep(false);
@@ -49,32 +83,70 @@ const Step1 = ({
     }
   }, [history, previousStep]);
 
+  const {
+    isValid,
+  } = formState;
+
   useEffect(() => {
     scrollToTop();
-    setTitle(`${t('questionary:headerQuestions')}`);
-    setSubtitle('');
+    setTitle(`${t('questionary:ageTitle')}`);
+    setSubtitle(t(''));
     setType('primary');
     setDoGoBack(() => handleDoBack);
-  }, [handleDoBack, setDoGoBack, setTitle, setType, setSubtitle, t, metadata]);
+  }, [handleDoBack, setDoGoBack, setTitle, setType, setSubtitle, metadata, t]);
 
   // Handlers
-  const onSubmit = async () => {
-    if (nextStep) {
-      setActiveStep(false);
-      history.push(nextStep);
+  const onSubmit = async (values: Step1Type) => {
+    if (values) {
+      action(values);
+      if (nextStep) {
+        setActiveStep(false);
+        history.push(nextStep);
+      }
     }
   };
 
   return (
     <MainContainer>
-      <TitleBlack>{t('questionary:title')}</TitleBlack>
-      <QuestionNote>{t('questionary:note')}</QuestionNote>
-      <WomanWithPhone />
+      <ProgressIndicator
+        currentStep={metadata?.current}
+        totalSteps={metadata?.total}
+        progressBar
+      />
+      <QuestionText extraSpace first>{t('questionary:ageGroup')}</QuestionText>
+
+      <Controller
+        control={control}
+        name="ageGroup"
+        defaultValue=""
+        render={({ onChange, value, name }) => (
+          <QuestionInput
+            name={name}
+            value={value}
+            onChange={onChange}
+            type="number"
+            placeholder={t('questionary:enterAge')}
+            autoComplete="Off"
+          />
+        )}
+      />
+      {/* Bottom Buttons */}
+      <ErrorMessage
+        errors={errors}
+        name="ageGroup"
+        render={({ message }) => (
+          <TextErrorContainer>
+            <ExclamationSVG />
+            {t(`main:${message}`, 'Please enter your age')}
+          </TextErrorContainer>
+        )}
+      />
       {activeStep && (
         <Portal>
           <WizardButtons
             leftLabel={t('questionary:nextButton')}
-            leftHandler={onSubmit}
+            leftHandler={handleSubmit(onSubmit)}
+            leftDisabled={!isValid}
             invert
           />
         </Portal>

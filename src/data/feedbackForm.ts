@@ -1,5 +1,5 @@
 export const feedbackForm = {
-  es: 'https://forms.gle/VgwrCWLcr9svjZg58',
+  ja: 'https://forms.gle/VgwrCWLcr9svjZg58',
 };
 
 declare global {

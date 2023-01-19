@@ -18,7 +18,7 @@ export const StyledInternalLink = styled(Link)<LinkProps>`
 export const StyledExternalLink = styled.a<LinkProps>`
   color: ${props => props.theme.colors.darkBlack};
   font-weight: ${({ isBold }) => (isBold ? 700 : 400)};
-  text-decoration: underline;
+  text-decoration: none;
 
   &:active, :visited {
     color: ${props => props.theme.colors.darkBlack};

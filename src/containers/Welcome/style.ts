@@ -54,6 +54,7 @@ export const WelcomeContent = styled.div<{ maxWidth?: number; mt?: number; }>`
     padding-left: 20px;
     padding-right: 20px;
     margin-top: 20px;
+    text-align: center;
   }
 
   @media screen and (${props => props.theme.breakpoints.tablet}){
@@ -382,6 +383,11 @@ export const HeaderImage = styled.img`
   height: 100%;
 `;
 
+export const AWSLogo = styled.img`
+  width: 178px;
+  height: 100%;
+`;
+
 export const LogoWhiteBG = styled(LogoSplash)`
   width: 109px;
   height: 143px;
@@ -474,12 +480,15 @@ export const WelcomeConsentForm = styled.div`
   }
 
   .c4,
-  .c22 {
+  .c22,
+  .c21,
+  .c1  {
     text-align: left;
   }
 
   .c12,
-  .c10 {
+  .c10,
+  .c21  {
     padding: 0;
     list-style-position: inside;
     text-align: left;

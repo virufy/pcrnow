@@ -47,7 +47,6 @@ import {
 const schema = Yup.object().shape({
   agreedConsentTerms: Yup.boolean().required().default(false).oneOf([true]),
   agreedPolicyTerms: Yup.boolean().required().default(false).oneOf([true]),
-  agreedCovidCollection: Yup.boolean().required().default(false).oneOf([true]),
 });
 
 type Step3Type = Yup.InferType<typeof schema>;
@@ -177,32 +176,12 @@ const Step4 = (p: Wizard.StepProps) => {
           )}
         />
 
-        <Controller
-          control={control}
-          name="agreedCovidCollection"
-          defaultValue={false}
-          render={({ onChange, value, name }) => (
-            <Checkbox
-              id="Step2-CollectionCovid"
-              label={(
-                <Trans i18nKey="consent:collectionColombia">
-                  I hereby expressly consent to the collection, processing and transfer of my personal information,
-                  biometric information, and health information.
-                </Trans>
-                )}
-              name={name}
-              onChange={e => onChange(e.target.checked)}
-              value={value}
-            />
-          )}
-        />
-
         <p><ErrorMessage errors={errors} name="name" /></p>
         {activeStep && (
           <Portal>
             <WizardButtons
               invert
-              leftLabel={t('consent:nextButton')}
+              leftLabel={t('consent:cooperateButton')}
               leftHandler={handleSubmit(onSubmit)}
               leftDisabled={!isValid}
             />
