@@ -27,6 +27,7 @@ export async function doSubmit({
     const {
       agreedConsentTerms,
       agreedPolicyTerms,
+      pcrTestResult,
     } = state.welcome;
 
     const {
@@ -51,6 +52,10 @@ export async function doSubmit({
 
     body.append('agreedConsentTerms', agreedConsentTerms);
     body.append('agreedPolicyTerms', agreedPolicyTerms);
+
+    if (pcrTestResult) {
+      body.append('pcrTestResult', pcrTestResult);
+    }
 
     const coughFile = recordYourCough.recordingFile || recordYourCough.uploadedFile;
     body.append('cough', coughFile, coughFile.name || 'filename.wav');

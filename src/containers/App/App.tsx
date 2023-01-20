@@ -49,7 +49,7 @@ const App = () => {
             <Route path="/submit-steps">
               <AsyncLoad key="SubmitSteps" container="SubmitSteps" />
             </Route>
-            <Redirect exact from="/" to="/welcome" />
+            <Redirect exact from="/" to={`/welcome${search}`} />
             <Route>
               <div>404 Page</div>
             </Route>
