@@ -57,7 +57,7 @@ const Step2 = (p: Wizard.StepProps) => {
   const history = useHistory();
   const { search } = useLocation();
 
-  const param = React.useMemo(() => {
+  const numParam = React.useMemo(() => {
     const params = search
       .replace('?', '')
       .split('&')
@@ -98,14 +98,14 @@ const Step2 = (p: Wizard.StepProps) => {
   }, [doBack, setDoGoBack, setLogoSize, setType, setSubtitle]);
 
   useEffect(() => {
-    if (param !== null && param !== undefined) {
-      if (param % 2 === 0) {
+    if (numParam !== null && numParam !== undefined) {
+      if (numParam % 2 === 0) {
         setValue('pcrTestResult', 'false');
       } else {
         setValue('pcrTestResult', 'true');
       }
     }
-  }, [param, setValue]);
+  }, [numParam, setValue]);
 
   const { t } = useTranslation();
 
