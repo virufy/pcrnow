@@ -54,7 +54,7 @@ export async function doSubmit({
     body.append('agreedPolicyTerms', agreedPolicyTerms);
 
     if (pcrTestResult) {
-      body.append('pcrTestResult', pcrTestResult);
+      body.append('pcr_test_result', pcrTestResult);
     }
 
     const coughFile = recordYourCough.recordingFile || recordYourCough.uploadedFile;
