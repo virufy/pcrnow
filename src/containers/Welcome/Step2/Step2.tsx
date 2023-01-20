@@ -57,10 +57,14 @@ const Step2 = (p: Wizard.StepProps) => {
   const history = useHistory();
   const { search } = useLocation();
 
-  const params = React.useMemo(() => {
-    const param = search.replace('?', '');
-    if (param) {
-      return parseInt(param, 0);
+  const param = React.useMemo(() => {
+    const params = search
+      .replace('?', '')
+      .split('&')
+      .filter((item: string) => !item.includes('='))
+      .find((item: string) => /[0-9]/.test(item));
+    if (params) {
+      return parseInt(params, 0);
     }
     return undefined;
   }, [search]);
@@ -94,14 +98,14 @@ const Step2 = (p: Wizard.StepProps) => {
   }, [doBack, setDoGoBack, setLogoSize, setType, setSubtitle]);
 
   useEffect(() => {
-    if (params !== null && params !== undefined) {
-      if (params % 2 === 0) {
+    if (param !== null && param !== undefined) {
+      if (param % 2 === 0) {
         setValue('pcrTestResult', 'false');
       } else {
         setValue('pcrTestResult', 'true');
       }
     }
-  }, [params, setValue]);
+  }, [param, setValue]);
 
   const { t } = useTranslation();
 
