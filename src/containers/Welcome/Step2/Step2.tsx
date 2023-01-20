@@ -1,7 +1,11 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import usePortal from 'react-useportal';
+
+// Form
+import { useForm } from 'react-hook-form';
+import { useStateMachine } from 'little-state-machine';
 
 // Header Control
 import useHeaderContext from 'hooks/useHeaderContext';
@@ -9,6 +13,9 @@ import useHeaderContext from 'hooks/useHeaderContext';
 // Components
 import WizardButtons from 'components/WizardButtons';
 import { BlackText } from 'components/Texts';
+
+// Update Action
+import { updateAction } from 'utils/wizard';
 
 // Utils
 import { scrollToTop } from 'helper/scrollHelper';
@@ -37,13 +44,39 @@ const Step2 = (p: Wizard.StepProps) => {
   const {
     setType, setDoGoBack, setLogoSize, setSubtitle,
   } = useHeaderContext();
+  const { state, action } = useStateMachine(updateAction(p.storeKey));
+
+  // Form
+  const {
+    setValue, handleSubmit, register,
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: state?.[p.storeKey],
+  });
 
   const history = useHistory();
+  const { search } = useLocation();
 
-  const onSubmit = () => {
-    if (p.nextStep) {
-      setActiveStep(false);
-      history.push(p.nextStep);
+  const numParam = React.useMemo(() => {
+    const params = search
+      .replace('?', '')
+      .split('&')
+      .filter((item: string) => !item.includes('='))
+      .find((item: string) => /[0-9]/.test(item));
+    if (params) {
+      return parseInt(params, 0);
+    }
+    return undefined;
+  }, [search]);
+
+  // Handlers
+  const onSubmit = async (values: Wizard.StepProps) => {
+    if (values) {
+      action(values);
+      if (p.nextStep) {
+        setActiveStep(false);
+        history.push(p.nextStep);
+      }
     }
   };
 
@@ -63,6 +96,16 @@ const Step2 = (p: Wizard.StepProps) => {
     setLogoSize('regular');
     setType('null');
   }, [doBack, setDoGoBack, setLogoSize, setType, setSubtitle]);
+
+  useEffect(() => {
+    if (numParam !== null && numParam !== undefined) {
+      if (numParam % 2 === 0) {
+        setValue('pcrTestResult', 'false');
+      } else {
+        setValue('pcrTestResult', 'true');
+      }
+    }
+  }, [numParam, setValue]);
 
   const { t } = useTranslation();
 
@@ -115,12 +158,14 @@ const Step2 = (p: Wizard.StepProps) => {
           </Trans>
         </BlackText>
 
+        <input type="hidden" {...register('pcrTestResult')} />
+
         {activeStep && (
           <Portal>
             <WizardButtons
               invert
               leftLabel={t('helpVirufy:agreeButton')}
-              leftHandler={onSubmit}
+              leftHandler={handleSubmit(onSubmit)}
             />
           </Portal>
         )}
