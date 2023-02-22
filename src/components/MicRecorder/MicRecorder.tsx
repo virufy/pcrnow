@@ -48,7 +48,7 @@ interface MicRecorderProps {
 const baseConfig = {
   usingMediaRecorder: false,
   sampleRate: 48000,
-  manualEncoderId: isSafari || isIOS ? 'wav' : 'flac', // wav / mp3 / flac
+  manualEncoderId: 'wav', // wav / mp3 / flac
   processorBufferSize: isSafari || isIOS ? 2048 : 4096, // 4096 flac / 2048 wav
 };
 export interface RecorderServiceType {
