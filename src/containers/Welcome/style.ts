@@ -482,13 +482,23 @@ export const WelcomeConsentForm = styled.div`
   .c4,
   .c22,
   .c21,
-  .c1  {
+  .c1,
+  .li-bullet-1,
+  .c5,
+  p  {
     text-align: left;
+  }
+
+  p.title,
+  .c50,
+  .c79 {
+    text-align: center;
   }
 
   .c12,
   .c10,
-  .c21  {
+  .c21,
+  .c8  {
     padding: 0;
     list-style-position: inside;
     text-align: left;
