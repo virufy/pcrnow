@@ -43,8 +43,6 @@ const audioMinLength: CommonJSON<number> = {
 
 const mimeTypes = 'audio/wav,audio/wave,audio/wav,audio/x-wav,audio/x-pn-wav,audio/mp3,audio/ogg';
 
-mimeTypes.concat('audio/wav');
-
 const schema = Yup.object({
   uploadedFile: Yup.mixed()
     .required('ERROR.FILE_REQUIRED')

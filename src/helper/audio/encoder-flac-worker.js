@@ -131,7 +131,7 @@ export default function () {
     const samples = mergeBuffersUint8(recBuffers, recLength);
 
     // var audioBlob = new Blob([samples], { type: type });
-    const theBlob = new Blob([samples], { type: 'audio/wav' });
+    const theBlob = new Blob([samples], { type: 'audio/flac' });
     return theBlob;
   }
 
