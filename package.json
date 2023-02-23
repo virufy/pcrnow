@@ -1,6 +1,6 @@
 {
   "name": "pcrnow",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "dependencies": {
     "@hookform/error-message": "0.0.4",
