@@ -10,9 +10,6 @@ import Header, { HeaderContextProvider } from 'components/Header';
 import FooterReportProblems from 'components/FooterReportProblems';
 import FooterInstallAsApp from 'components/FooterInstallAsApp';
 
-// hooks
-import { useInitializeGoogleAnalytics } from 'hooks/useInitializeGoogleAnalytics';
-
 // Styles
 import { AppContainer } from './style';
 
@@ -35,8 +32,6 @@ const App = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Google Analytics
-  useInitializeGoogleAnalytics();
   return (
     <AppContainer>
       <HeaderContextProvider>
