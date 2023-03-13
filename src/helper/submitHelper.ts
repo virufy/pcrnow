@@ -41,7 +41,7 @@ export async function doSubmit({
       vaccine,
       smokeLastSixMonths,
       currentMedicalCondition,
-
+      pcrTestDate,
     } = state['submit-steps'];
 
     const body = new FormData();
@@ -55,6 +55,10 @@ export async function doSubmit({
 
     if (pcrTestResult) {
       body.append('pcrTestResult', pcrTestResult);
+    }
+
+    if (pcrTestDate) {
+      body.append('pcrTestDate', pcrTestDate);
     }
 
     const coughFile = recordYourCough.recordingFile || recordYourCough.uploadedFile;
