@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import usePortal from 'react-useportal';
 import { useTranslation } from 'react-i18next';
@@ -32,15 +32,10 @@ import {
 
 const schemaWithoutPatient = Yup.object({
   pcrTestDate: Yup.date().when('$hasPcr', { is: true, then: Yup.date().required(), otherwise: Yup.date() }),
-  pcrTestResult: Yup.string().when('$hasPcr', { is: true, then: Yup.string().required(), otherwise: Yup.string() }),
+  pcrTestResult: Yup.string().oneOf(['positive', 'negative', 'unsure']).required(),
 }).defined();
 
-const schemaWithPatient = Yup.object({
-  patientAntigenTestResult: Yup.string().oneOf(['positive', 'negative', '']).when('patientPcrTestResult', (value: string, schema: any) => (!value ? schema.required() : schema)),
-  patientPcrTestResult: Yup.string().oneOf(['positive', 'negative', '']),
-}).defined();
-
-type Step1aType = Yup.InferType<typeof schemaWithoutPatient> | Yup.InferType<typeof schemaWithPatient>;
+type Step1aType = Yup.InferType<typeof schemaWithoutPatient>;
 
 const Step1b = ({
   previousStep,
@@ -61,30 +56,34 @@ const Step1b = ({
 
   // States
   const [activeStep, setActiveStep] = React.useState(true);
-  const [hasPcrTest, setHasPcrTest] = React.useState(false);
 
-  useEffect(() => {
-    if (state) {
-      const { testTaken } = state['submit-steps'] || {};
-
-      setHasPcrTest(testTaken?.includes('pcr') ?? false);
+  const pcrTestResultDefault = useMemo(() => {
+    const pcrResult = state.welcome?.pcrTestResult;
+    if (pcrResult === 'true') {
+      return 'positive';
     }
-  }, [state]);
+    if (pcrResult === 'false') {
+      return 'negative';
+    }
+    return undefined;
+  }, [state.welcome?.pcrTestResult]);
 
   // Form
   const {
     control, handleSubmit, formState, setValue,
   } = useForm({
     mode: 'onChange',
-    defaultValues: state?.[storeKey],
+    defaultValues: {
+      pcrTestDate: new Date(),
+      pcrTestResult: pcrTestResultDefault,
+      ...state?.[storeKey],
+    },
     context: {
       hasPcr: state['submit-steps']?.testTaken?.includes('pcr') ?? false,
     },
     resolver: yupResolver(schemaWithoutPatient),
   });
   const { errors, isValid } = formState;
-
-  console.log(state.welcome?.pcrTestResult);
 
   const handleDoBack = React.useCallback(() => {
     setActiveStep(false);
@@ -107,16 +106,6 @@ const Step1b = ({
     setValue('pcrTestDate', new Date());
   }, [setValue]);
 
-  useEffect(() => {
-    const pcrResult = state.welcome?.pcrTestResult;
-    if (pcrResult === 'true') {
-      setValue('pcrTestResult', 'positive');
-    }
-    if (pcrResult === 'false') {
-      setValue('pcrTestResult', 'negative');
-    }
-  }, [setValue, state.welcome?.pcrTestResult]);
-
   // Handlers
   const onSubmit = async (values: Step1aType) => {
     if (values) {
@@ -125,7 +114,7 @@ const Step1b = ({
         pcrTestResult,
       } = (values as any);
       // if patient
-      if (hasPcrTest && (!pcrTestDate || !pcrTestResult)) {
+      if (!pcrTestDate || !pcrTestResult) {
         return;
       }
 

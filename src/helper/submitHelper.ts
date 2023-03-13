@@ -42,6 +42,7 @@ export async function doSubmit({
       smokeLastSixMonths,
       currentMedicalCondition,
       pcrTestDate,
+      pcrTestResult: pcrTestResultUserInput,
     } = state['submit-steps'];
 
     const body = new FormData();
@@ -55,6 +56,10 @@ export async function doSubmit({
 
     if (pcrTestResult) {
       body.append('pcrTestResult', pcrTestResult);
+    }
+
+    if (pcrTestResultUserInput) {
+      body.append('pcrTestResultUserInput', pcrTestResultUserInput);
     }
 
     if (pcrTestDate) {
