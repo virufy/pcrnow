@@ -54,7 +54,7 @@ export const StepTracker = styled.div<{ progress?: number }>`
 export const WomanWithPhone = styled(WomanWithPhoneSvg)`
   width: 205px;
   height: 156px;
-  margin: 40px auto;
+  margin: 77px auto;
   display: block;
 `;
 
